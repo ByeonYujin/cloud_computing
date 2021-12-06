@@ -110,7 +110,7 @@ public class awsTest {
 	
 	
 	
-	//완료
+	//1. 인스턴스 리스트
 	public static void listInstances()
 	{
 		System.out.println("Listing instances....");
@@ -143,7 +143,7 @@ public class awsTest {
 	
 	
 	
-	//완료
+	//2. 가용 영역
 	public static void availableZones()
 	{
 		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
@@ -164,7 +164,7 @@ public class awsTest {
 	
 	
 	
-	//완료
+	//3. 인스턴스 시작
 	public static void startInstance()
 	{
 	
@@ -201,7 +201,7 @@ public class awsTest {
 	
 	
 	
-	//완료
+	//4. 가용 리전
 	public static void availableRegions()
 	{
 		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
@@ -219,7 +219,7 @@ public class awsTest {
 	
 	
 	
-	//완료
+	//5. 인스턴스 중지
 	public static void stopInstance()
 	{
 	
@@ -255,7 +255,7 @@ public class awsTest {
 
 	
 	
-	//완료
+	//6. 인스턴스 생성
 	public static void createInstance()
     	{
 	    	Scanner sc = new Scanner(System.in);
@@ -291,7 +291,7 @@ public class awsTest {
     	
     	
     	
-    	//중간 구현
+    	//7. 인스턴스 재부팅
     	public static void rebootInstance()
     	{
 	    	Scanner sc = new Scanner(System.in);
@@ -311,19 +311,18 @@ public class awsTest {
     	
     	
     	
+    	//8. 이미지 리스트
     	public static void listImages()
     	{
-    		List<Image> images;
-  		DescribeImagesRequest request = new DescribeImagesRequest();
-  		request = request.withOwners("892912192465");
-  		DescribeImagesResult result = ec2Client.describeImages(request);
-  		if (result != null) {
-		    images = result.getImages();
-		    System.out.println(images.getImageId());
-		}
-		else {
-		    System.out.printf("No images found");
-		}
+    		Filter filter = new Filter();
+		filter.setName("owner-id");
+		filter.setValues(Arrays.asList(new String[] { "892912192465" }));
+		DescribeImagesRequest request = new DescribeImagesRequest().withFilters(filter);
+		DescribeImagesResult describeImagesResult = ec2.describeImages(request);
+
+		describeImagesResult.getImages().forEach(image -> {
+			System.out.println(image.getImageId());
+		});
     	}
     	
     	
