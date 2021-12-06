@@ -113,7 +113,7 @@ public class awsTest {
 	//1. 인스턴스 리스트
 	public static void listInstances()
 	{
-		System.out.println("Listing instances....");
+		System.out.println("Listing instances...");
 		boolean done = false;
 		DescribeInstancesRequest request = new DescribeInstancesRequest();
 		while(!done) {
@@ -151,11 +151,12 @@ public class awsTest {
 		DescribeAvailabilityZonesResult zones_response =
 		    ec2.describeAvailabilityZones();
 
+		System.out.println("listing available zones...");
 		for(AvailabilityZone zone : zones_response.getAvailabilityZones()) {
 		    System.out.printf(
-		        "Found availability zone %s " +
-		        "with status %s " +
-		        "in region %s",
+		        "[zone] %-15s " +
+		        "[status] %-15s " +
+		        "[region] %s",
 		        zone.getZoneName(),
 		        zone.getState(),
 		        zone.getRegionName() + "\n");
@@ -169,7 +170,7 @@ public class awsTest {
 	{
 	
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter instance id : ");
+		System.out.print("Please enter instance id : ");
 		String instance_id = sc.next();
 		
 		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
@@ -208,10 +209,11 @@ public class awsTest {
 
 		DescribeRegionsResult regions_response = ec2.describeRegions();
 
+		System.out.println("listing avaiable regions...");
 		for(Region region : regions_response.getRegions()) {
 		    System.out.printf(
-		        "Found region %s " +
-		        "with endpoint %s",
+		        "[region] %-15s " +
+		        "[endpoint] %s",
 		        region.getRegionName(),
 		        region.getEndpoint() + "\n");
 		}
@@ -224,7 +226,7 @@ public class awsTest {
 	{
 	
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter instance id : ");
+		System.out.print("Please enter instance id : ");
 		String instance_id = sc.next();
 		
 		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
@@ -259,9 +261,9 @@ public class awsTest {
 	public static void createInstance()
     	{
 	    	Scanner sc = new Scanner(System.in);
-		System.out.print("Enter instance name : ");
+		System.out.print("Please enter instance name : ");
 		String name = sc.next();
-		System.out.print("Enter ami id : ");
+		System.out.print("Please Enter ami id : ");
 		String ami_id = sc.next();
 
 		RunInstancesRequest run_request = new RunInstancesRequest()
@@ -295,7 +297,7 @@ public class awsTest {
     	public static void rebootInstance()
     	{
 	    	Scanner sc = new Scanner(System.in);
-		System.out.print("Enter instance id : ");
+		System.out.print("Please enter instance id : ");
 		String instance_id = sc.next();
 
 		final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
@@ -316,12 +318,25 @@ public class awsTest {
     	{
     		Filter filter = new Filter();
 		filter.setName("owner-id");
-		filter.setValues(Arrays.asList(new String[] { "892912192465" }));
+		String owner_id = "892912192465";
+		//filter.setValues(Arrays.asList(new String[]{"892912192465"}));
+		filter.setValues(Arrays.asList(owner_id));
 		DescribeImagesRequest request = new DescribeImagesRequest().withFilters(filter);
 		DescribeImagesResult describeImagesResult = ec2.describeImages(request);
 
+		System.out.println("listing images...");
 		describeImagesResult.getImages().forEach(image -> {
-			System.out.println(image.getImageId());
+			System.out.printf(
+					"[id] %s, " +
+					"[name] %s, " +
+					"[type] %s, " +
+					"[state] %s, " +
+					"[creation date] %s",
+					image.getImageId(),
+					image.getName(),
+					image.getImageType(),
+					image.getState(),
+					image.getCreationDate());
 		});
     	}
     	
