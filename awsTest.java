@@ -319,7 +319,6 @@ public class awsTest {
     		Filter filter = new Filter();
 		filter.setName("owner-id");
 		String owner_id = "892912192465";
-		//filter.setValues(Arrays.asList(new String[]{"892912192465"}));
 		filter.setValues(Arrays.asList(owner_id));
 		DescribeImagesRequest request = new DescribeImagesRequest().withFilters(filter);
 		DescribeImagesResult describeImagesResult = ec2.describeImages(request);
